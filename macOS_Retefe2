@@ -1,0 +1,12 @@
+rule XProtect_OSX_Dok_A 
+{
+    meta:
+        description = "OSX.Dok.A" 
+    strings:
+        $a1 = "Updates" 
+        $a2 = "InstallTor" 
+        $b1 = "InstallCert" 
+        $b2 = "base64 -i %@" 
+    condition:
+        Macho and filesize < 100000 and all of them 
+}
