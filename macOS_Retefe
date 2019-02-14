@@ -1,0 +1,12 @@
+rule XProtect_OSX_Dok_B 
+{
+    meta:
+        description = "OSX.Dok.B" 
+    strings:
+        $a1 = "SelfInstall" 
+        $a2 = "IsLoginScriptExists" 
+        $a3 = "AddLoginScript" 
+        $b1 = "IyEvdXNyL2Jpbi9lbnYgcHl0aG9uCiMgLSotIGNvZGluZzogdXRmLTggLSotCmltc" 
+    condition:
+        Macho and filesize < 600000 and filesize > 10000 and all of them 
+}
