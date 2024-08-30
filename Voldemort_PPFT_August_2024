@@ -1,0 +1,28 @@
+
+
+rule Voldemort_PPFT_August_2024 {
+    meta:		
+      sharing = "TLP:WHITE"
+      source = "Proofpoint"
+      author = "@Bry_Campbell"
+      description = "Basic string values derived from publish samples"
+      category = "MALWARE"
+      malware = "Voldemort"
+      reference = "https://www.proofpoint.com/us/blog/threat-insight/malware-must-not-be-named-suspected-espionage-campaign-delivers-voldemort"
+      date = "2024-08-30"
+      SHA256 = "fa383eac2bf9ad3ef889e6118a28aa57a8a8e6b5224ecdf78dcffc5225ee4e1f"
+    strings:
+    $a1 = "Voldemort_gdrive_c.dll" ascii fullword
+    $a2 = "SparkEntryPoint" ascii fullword
+    $a3 = "abHost.exe" ascii fullword
+    $a4 = "Content-Type: application/json" ascii fullword
+    $a5 = "addSheet" ascii fullword
+    $a6 = "access_token" ascii fullword
+    condition:
+    (
+        uint16(0) == 0x5A4D and // Check for the "MZ" header indicating a PE file
+        uint16(uint32(0x3C)) == 0x8664 and // Check for the "PE" header and x64 architecture (0x8664)
+        filesize < 300KB
+        )
+              and 4 of ($a*)
+    }
