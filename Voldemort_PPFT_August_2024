@@ -5,7 +5,7 @@ rule Voldemort_PPFT_August_2024 {
       sharing = "TLP:WHITE"
       source = "Proofpoint"
       author = "@Bry_Campbell"
-      description = "Basic string values derived from publish samples"
+      description = "Basic string values derived from published samples"
       category = "MALWARE"
       malware = "Voldemort"
       reference = "https://www.proofpoint.com/us/blog/threat-insight/malware-must-not-be-named-suspected-espionage-campaign-delivers-voldemort"
