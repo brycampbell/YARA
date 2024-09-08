@@ -1,0 +1,33 @@
+rule ATProto_Detection {
+    meta:
+        sharing = "TLP:WHITE"
+        author = "@Bry_Campbell"
+        description = "Detect AT Protocol and associated strings in PE files (.exe, .dll)"
+        category = "Hunting"
+        reference = "https://atproto.com/docs"
+        date = "2024-09-08"
+        file_type = "PE (.exe, .dll)"
+    
+    strings:
+        $atproto_string = "atproto" ascii wide nocase
+        $bluesky = "bluesky" ascii wide nocase
+        $lexicon = "Lexicon" ascii wide nocase
+        $pds = "PDS" ascii wide nocase
+        $did = "did:atproto" ascii wide nocase
+        $xrpc = "XRPC" ascii wide nocase
+        $repository = "repo" ascii wide nocase
+        $eventstream = "EventStream" ascii wide nocase
+        $at_scheme = "at://" ascii wide nocase
+        $nsid = "NSID" ascii wide nocase
+
+    condition:
+        // Ensure the file is a PE file (.exe or .dll) with "MZ" header and architecture check
+        uint16(0) == 0x5A4D and          // "MZ" header check for PE files
+        uint16(uint32(0x3C) + 4) == 0x8664 and // PE header and x64 architecture (0x8664 for x64)
+        
+        // File size restriction for better performance
+        filesize < 2MB 
+        
+        // Trigger when 5 or more strings are found
+        and 5 of ($atproto_string, $bluesky, $lexicon, $pds, $did, $xrpc, $repository, $eventstream, $at_scheme, $nsid)
+}
